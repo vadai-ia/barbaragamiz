@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm.cmd run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o logo.svg \"https://res.cloudinary.com/dvxrojzi1/image/upload/v1783382040/Frame_144_jtxztz.svg\" -w \"HTTP %{http_code}  %{size_download} bytes\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"logo.svg: %{http_code}\\\\n\" http://localhost:3000/logo.svg)",
+      "Bash(curl -s -o public/primavera.png \"https://res.cloudinary.com/dvxrojzi1/image/upload/v1783382685/ChatGPT_Image_6_jul_2026_06_04_38_p.m._lsqdkf.png\" -w \"HTTP %{http_code}  %{size_download} bytes\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"primavera.png: %{http_code}\\\\n\" http://localhost:3000/primavera.png)",
+      "Bash(curl -s -o public/mujer-luna.png \"https://res.cloudinary.com/dvxrojzi1/image/upload/v1783382733/ChatGPT_Image_6_jul_2026_06_05_26_p.m._whzime.png\" -w \"HTTP %{http_code}  %{size_download} bytes\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"mujer-luna.png: %{http_code}\\\\n\" http://localhost:3000/mujer-luna.png)",
+      "Bash(curl -s -o public/la-musa-del-cielo.png \"https://res.cloudinary.com/dvxrojzi1/image/upload/v1783382867/ChatGPT_Image_6_jul_2026_06_07_41_p.m._aygqos.png\" -w \"HTTP %{http_code}  %{size_download} bytes\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"la-musa-del-cielo.png: %{http_code}\\\\n\" http://localhost:3000/la-musa-del-cielo.png)",
+      "Bash(curl -s -o public/retorica.png \"https://res.cloudinary.com/dvxrojzi1/image/upload/v1783383016/ChatGPT_Image_6_jul_2026_06_10_09_p.m._onjafe.png\" -w \"HTTP %{http_code}  %{size_download} bytes\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"retorica.png: %{http_code}\\\\n\" http://localhost:3000/retorica.png)",
+      "Bash(curl -s -o public/retorica-2.png \"https://res.cloudinary.com/dvxrojzi1/image/upload/v1783383123/ChatGPT_Image_6_jul_2026_06_11_57_p.m._wsy58b.png\" -w \"HTTP %{http_code}  %{size_download} bytes\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"retorica-2.png: %{http_code}\\\\n\" http://localhost:3000/retorica-2.png)",
+      "Bash(curl -s -o public/luna-atrevida.png \"https://res.cloudinary.com/dvxrojzi1/image/upload/v1783383206/ChatGPT_Image_6_jul_2026_06_13_18_p.m._tjs8kq.png\" -w \"HTTP %{http_code}  %{size_download} bytes\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"luna-atrevida.png: %{http_code}\\\\n\" http://localhost:3000/luna-atrevida.png)",
+      "Bash(curl -s -o public/intro.png \"https://res.cloudinary.com/dvxrojzi1/image/upload/v1783383833/ChatGPT_Image_6_jul_2026_06_23_45_p.m._tg9gtd.png\" -w \"HTTP %{http_code}  %{size_download} bytes\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"intro.png: %{http_code}\\\\n\" http://localhost:3000/intro.png)",
+      "Bash(curl -s -o public/escultura.png \"https://res.cloudinary.com/dvxrojzi1/image/upload/v1783383963/ChatGPT_Image_6_jul_2026_06_25_56_p.m._ayubp2.png\" -w \"HTTP %{http_code}  %{size_download} bytes\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"escultura.png: %{http_code}\\\\n\" http://localhost:3000/escultura.png)",
+      "Bash(node -e \"const p=require\\('./package.json'\\).dependencies; for \\(const k of ['sanity','next-sanity','@sanity/image-url','@sanity/vision','@sanity/orderable-document-list','styled-components','next','react']\\) console.log\\(k, p[k]||'-'\\)\")",
+      "PowerShell(cd \"c:\\\\Users\\\\aranz\\\\Favorites\\\\Barbara Gamiz\"; npm install --legacy-peer-deps 2>&1 | Select-Object -Last 8; Write-Output \"--- swr now:\"; \\(Get-Content node_modules/swr/package.json | Select-String '\"version\"'\\))",
+      "Bash(node -e \"const R=require\\('react'\\); console.log\\('useEffectEvent:', typeof R.useEffectEvent\\); console.log\\('experimental_useEffectEvent:', typeof R.experimental_useEffectEvent\\); console.log\\('version:', R.version\\)\")",
+      "Bash(node -e \"const p=require\\('sanity/package.json'\\); console.log\\('peer react:', \\(p.peerDependencies||{}\\).react\\); console.log\\('deps react?', \\(p.dependencies||{}\\).react\\)\")",
+      "Bash(node -e \"console.log\\(require\\('next/package.json'\\).version\\)\")",
+      "Bash(npm view *)",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>{const v=JSON.parse\\(d\\).filter\\(x=>/^1[56]\\\\./.test\\(x\\)\\);console.log\\(v.slice\\(-12\\).join\\(', '\\)\\)}\\)\")",
+      "Bash(node -e \"const m=require\\('@sanity/image-url'\\); console.log\\('named createImageUrlBuilder:', typeof m.createImageUrlBuilder\\)\")",
+      "Read(//c/Users/aranz/.claude/projects/c--Users-aranz-Favorites-Barbara-Gamiz/memory/**)",
+      "Bash(ls -la MEMORY.md)",
+      "Bash(awk -F= '/^NEXT_PUBLIC_SANITY_PROJECT_ID/{print \"PROJECT_ID = \" $2} /^NEXT_PUBLIC_SANITY_DATASET/{print \"DATASET = \" $2} /^SANITY_API_WRITE_TOKEN/{print \"TOKEN = \" \\(length\\($2\\)>0 ? \"\\(puesto, \" length\\($2\\) \" caracteres\\)\" : \"\\(VACÍO\\)\"\\)}' .env.local)",
+      "Bash(curl -s \"https://7f7uya6x.api.sanity.io/v2024-07-06/data/query/production?query=count\\(*%5B_type%3D%3D%22artwork%22%5D\\)\" -w \"\\\\nHTTP %{http_code}\\\\n\")",
+      "Bash(npx --yes tsx scripts/seed.ts)"
+    ]
+  }
+}

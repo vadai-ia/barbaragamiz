@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #f3f0e9;
+  --color-paper: #faf8f3;
+  --color-card: #e7e2da;
+  --color-ink: #3e3e38;
+  --color-muted: #7e7e7e;
+  --color-line: #d8d2c8;
+  --color-accent: #a34f34;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: var(--font-cormorant);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: #3e3e38;
+  color: #faf8f3;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.page-shell {
+  margin-inline: auto;
+  width: min(100% - 2.5rem, 1040px);
+}
+
+@media (min-width: 768px) {
+  .page-shell {
+    width: min(100% - 6rem, 1040px);
+  }
+}
+
+/* Hide scrollbar for horizontal galleries while keeping scroll */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
