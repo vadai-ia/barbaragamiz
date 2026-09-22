@@ -1,30 +1,58 @@
-# dependencies
+# ── Dependencias ─────────────────────────────────────────────
 /node_modules
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+.npm-cache/
 
-# next.js
+# ── Next.js (compilados y caché) ─────────────────────────────
 /.next/
 /out/
-
-# production
 /build
+next-env.d.ts
+*.tsbuildinfo
+.turbo
 
-# local env files
+# ── Sanity (Studio compilado y caché local) ──────────────────
+/dist
+.sanity/
+
+# ── Variables de entorno: contienen tokens y claves ──────────
+# Se ignoran todas; solo se permite subir una plantilla sin datos reales.
 .env*
+!.env.example
 
-# misc
-.DS_Store
+# ── Despliegue ───────────────────────────────────────────────
+.vercel
 *.pem
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.npm-cache/
-next-dev*.log
-.vercel
-*.tsbuildinfo
-next-env.d.ts
-
-# logs del servidor de desarrollo
+pnpm-debug.log*
 dev.log
+next-dev*.log
 
-# ajustes locales de Claude Code (los compartidos van en .claude/settings.json)
+# ── Pruebas ──────────────────────────────────────────────────
+/coverage
+
+# ── Sistema operativo ────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Editores ─────────────────────────────────────────────────
+.idea/
+*.swp
+
+# ── Ajustes locales de Claude Code ───────────────────────────
+# Los compartidos van en .claude/settings.json
 .claude/settings.local.json
+
+# ── Scripts temporales de un solo uso ────────────────────────
+scripts/_*

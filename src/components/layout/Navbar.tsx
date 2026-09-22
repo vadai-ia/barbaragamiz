@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { navigation } from "@/lib/constants";
 import { Logo } from "@/components/ui/Logo";
 import { SocialIcons } from "@/components/ui/SocialIcons";
@@ -11,11 +11,30 @@ import { SocialIcons } from "@/components/ui/SocialIcons";
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const isHome = pathname === "/";
+
+  // En portada el menú flota sobre la obra hasta que se hace scroll.
+  useEffect(() => {
+    if (!isHome) return;
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isHome]);
+
+  const overlay = isHome && !scrolled && !open;
 
   return (
-    <header className="sticky top-0 z-50 bg-card/70 backdrop-blur-[25px]">
+    <header
+      className={`${isHome ? "fixed inset-x-0" : "sticky"} top-0 z-50 transition-colors duration-500 ${
+        overlay
+          ? "bg-transparent text-paper"
+          : "bg-card/70 text-ink backdrop-blur-[25px]"
+      }`}
+    >
       <div className="page-shell flex items-center justify-between py-6">
-        <Logo />
+        <Logo inverse={overlay} />
 
         <nav className="hidden items-center gap-4 lg:flex">
           {navigation.map((item) => {
@@ -28,7 +47,7 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-[14px] leading-[18px] text-ink transition-opacity hover:opacity-60 ${
+                className={`type-small transition-opacity hover:opacity-60 ${
                   active ? "underline underline-offset-2" : ""
                 }`}
               >
@@ -45,22 +64,25 @@ export function Navbar() {
         <button
           type="button"
           aria-label={open ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
-          className="grid h-11 w-11 place-items-center border border-line lg:hidden"
+          className={`grid h-11 w-11 place-items-center border transition-colors lg:hidden ${
+            overlay ? "border-paper/40" : "border-line"
+          }`}
         >
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
       {open && (
-        <div className="absolute left-0 top-full w-full border-b border-line bg-canvas px-4 py-8 shadow-xl lg:hidden">
+        <div className="absolute left-0 top-full w-full border-b border-line bg-canvas px-4 py-8 text-ink shadow-xl lg:hidden">
           <nav className="flex flex-col">
             {navigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="border-b border-line py-5 font-serif text-3xl"
+                className="type-heading border-b border-line py-5"
               >
                 {item.label}
               </Link>

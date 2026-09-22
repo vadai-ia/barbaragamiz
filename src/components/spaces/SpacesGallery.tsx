@@ -3,42 +3,96 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-const spaces = [
-  {
-    titulo: "Primavera",
-    dimensiones: "90 x 130",
-    captionTop: true,
-    src: "/primavera.png",
-  },
+const CLOUDINARY = "https://res.cloudinary.com/dvxrojzi1/image/upload";
+
+// Obras instaladas en interiores reales (Cloudinary: Barbara Gamiz/ESPACIOS).
+const spaces: {
+  titulo: string;
+  dimensiones?: string;
+  captionTop: boolean;
+  src: string;
+}[] = [
   {
     titulo: "Mujer Luna",
-    dimensiones: "110 x 150",
-    captionTop: false,
-    src: "/mujer-luna.png",
-  },
-  {
-    titulo: "La Musa Del Cielo",
-    dimensiones: "120 x 100 cm",
+    dimensiones: "170 x 143 cm",
     captionTop: true,
-    src: "/la-musa-del-cielo.png",
+    src: `${CLOUDINARY}/v1788982266/Mujer_Luna_c5cpsc.jpg`,
   },
   {
-    titulo: "Rétorica",
-    dimensiones: "120 x 270",
+    titulo: "Mantra",
+    dimensiones: "150 cm de diámetro",
     captionTop: false,
-    src: "/retorica.png",
+    src: `${CLOUDINARY}/v1788982266/Mantra_vmqrbh.jpg`,
+  },
+  {
+    titulo: "La Musa del Cielo",
+    dimensiones: "150 x 130 cm",
+    captionTop: true,
+    src: `${CLOUDINARY}/v1788982265/La_Musa_del_Cielo_popgoh.jpg`,
+  },
+  {
+    titulo: "Soñando",
+    dimensiones: "122 x 182 cm",
+    captionTop: false,
+    src: `${CLOUDINARY}/v1788982267/Son_%C3%A2ando_mubtrc.jpg`,
+  },
+  {
+    titulo: "Emociones",
+    dimensiones: "100 x 200 cm",
+    captionTop: true,
+    src: `${CLOUDINARY}/v1788982262/Emociones_o11xp6.jpg`,
+  },
+  {
+    titulo: "Cuerpo",
+    dimensiones: "230 x 118 cm",
+    captionTop: false,
+    src: `${CLOUDINARY}/v1788982261/Cuerpo_izorlb.jpg`,
+  },
+  {
+    titulo: "Enigma",
+    dimensiones: "122 x 220 cm",
+    captionTop: true,
+    src: `${CLOUDINARY}/v1788982263/Enigma_rr5a6c.jpg`,
+  },
+  {
+    titulo: "Umbral",
+    captionTop: false,
+    src: `${CLOUDINARY}/v1788982278/Umbral_fuglzt.jpg`,
+  },
+  {
+    titulo: "Miedo",
+    captionTop: true,
+    src: `${CLOUDINARY}/v1788982264/Miedo_x6e2vo.jpg`,
+  },
+  {
+    titulo: "Primavera",
+    captionTop: false,
+    src: `${CLOUDINARY}/v1788982266/Primavera_zb0tu2.jpg`,
   },
   {
     titulo: "Trilogía",
-    dimensiones: "100 x 140",
     captionTop: true,
-    src: "/retorica-2.png",
+    src: `${CLOUDINARY}/v1788982267/Trilogia_yw1cnz.jpg`,
   },
   {
-    titulo: "Luna Atrevida",
-    dimensiones: "120 x 100",
+    titulo: "Entre el Cielo y la Tierra",
     captionTop: false,
-    src: "/luna-atrevida.png",
+    src: `${CLOUDINARY}/v1788982316/Entre_el_Cielo_y_la_Tierra_v40lw6.jpg`,
+  },
+  {
+    titulo: "Intimidad",
+    captionTop: true,
+    src: `${CLOUDINARY}/v1788982265/Intimidad_hzwrda.jpg`,
+  },
+  {
+    titulo: "Garabatos",
+    captionTop: false,
+    src: `${CLOUDINARY}/v1788982263/Garabatos_rrfn1l.jpg`,
+  },
+  {
+    titulo: "Alegoría",
+    captionTop: true,
+    src: `${CLOUDINARY}/v1788982310/Alegori_%C3%BCa_khl6pi.jpg`,
   },
 ];
 
@@ -113,9 +167,13 @@ export function SpacesGallery() {
       <div className="flex w-max gap-6 md:gap-10">
         {spaces.map((space, index) => {
           const caption = (
-            <div className="flex items-center justify-between gap-4 text-[16px] leading-none tracking-[0.02em]">
-              <span className="font-bold text-ink">{space.titulo}</span>
-              <span className="text-right text-muted">{space.dimensiones}</span>
+            <div className="flex items-baseline justify-between gap-4">
+              <span className="type-small font-medium text-ink">{space.titulo}</span>
+              {space.dimensiones && (
+                <span className="type-small text-right text-muted">
+                  {space.dimensiones}
+                </span>
+              )}
             </div>
           );
 
@@ -128,7 +186,7 @@ export function SpacesGallery() {
               <div className="relative h-[380px] overflow-hidden bg-line shadow-[4px_4px_10px_rgba(0,0,0,0.15)] md:h-[466px]">
                 <Image
                   src={space.src}
-                  alt={space.titulo}
+                  alt={`${space.titulo} instalada en un interior`}
                   fill
                   draggable={false}
                   sizes="377px"

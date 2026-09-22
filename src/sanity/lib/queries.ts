@@ -9,6 +9,7 @@ const artworkFields = groq`
   dimensiones,
   anio,
   imagen,
+  "imagenDimensiones": imagen.asset->metadata.dimensions{ width, height },
   "serie": serie->{ _id, titulo, "slug": slug.current }
 `;
 
@@ -69,6 +70,41 @@ export const serieBySlugQuery = groq`
   *[_type == "serie" && slug.current == $slug][0] {
     ${serieFields}
   }
+`;
+
+const postFields = groq`
+  _id,
+  titulo,
+  "slug": slug.current,
+  fecha,
+  lugar,
+  extracto,
+  imagen,
+  contenido
+`;
+
+// Entradas marcadas "Mostrar en inicio" (las tres más recientes).
+export const featuredPostsQuery = groq`
+  *[_type == "post" && destacada == true] | order(fecha desc) [0...3] {
+    ${postFields}
+  }
+`;
+
+// Todas las entradas, de la más reciente a la más antigua.
+export const allPostsQuery = groq`
+  *[_type == "post"] | order(fecha desc) {
+    ${postFields}
+  }
+`;
+
+export const postBySlugQuery = groq`
+  *[_type == "post" && slug.current == $slug][0] {
+    ${postFields}
+  }
+`;
+
+export const postSlugsQuery = groq`
+  *[_type == "post" && defined(slug.current)][].slug.current
 `;
 
 // Todos los slugs de serie (para generar las páginas de serie).

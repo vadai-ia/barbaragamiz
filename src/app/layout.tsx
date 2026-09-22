@@ -24,8 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
-      <body className={`${cormorant.variable} antialiased`}>{children}</body>
+    // La variable de la fuente va en <html>: el tema la lee desde :root, y si
+    // solo existiera en <body> todas las serif caerían a la sans.
+    <html lang="es" className={cormorant.variable}>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

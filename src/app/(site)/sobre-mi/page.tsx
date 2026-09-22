@@ -1,65 +1,56 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { EditorialList, EditorialRow } from "@/components/ui/EditorialList";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+import { PageHero } from "@/components/ui/PageHero";
+import { Section } from "@/components/ui/Section";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { press } from "@/data/press";
 
 export const metadata: Metadata = {
   title: "Sobre mí",
   description: "Biografía, práctica y trayectoria de Bárbara Gamiz.",
 };
 
-const milestones = [
-  ["2025", "La materia recuerda", "Museo de Arte Contemporáneo"],
-  ["2024", "Habitar la pausa", "Galería Norte"],
-  ["2023", "Geografías íntimas", "Centro Cultural Sur"],
-  ["2022", "Residencia de producción", "Taller Abierto"],
-];
+const CLOUDINARY = "https://res.cloudinary.com/dvxrojzi1/image/upload";
 
 export default function AboutPage() {
   return (
     <>
-      <section className="page-shell grid gap-12 py-16 md:grid-cols-[0.8fr_1.2fr] md:py-28">
-        <div className="flex flex-col justify-center">
-          <SectionTitle
-            eyebrow="Sobre mí"
-            title="El arte como forma de atención."
-          />
-          <p className="mt-10 max-w-xl text-sm font-light leading-8 text-muted md:text-base">
-            Soy Bárbara Gamiz, artista plástica. Mi práctica surge del deseo de
-            comprender cómo la materia guarda memoria y cómo los espacios que
-            habitamos influyen en nuestra percepción.
-          </p>
-        </div>
-        <div className="relative min-h-[620px] bg-line md:min-h-[760px]">
+      <PageHero
+        eyebrow="Sobre mí"
+        title="El arte como forma de atención."
+        intro="Soy Bárbara Gamiz, artista plástica. Mi práctica surge del deseo de comprender cómo la materia guarda memoria y cómo los espacios que habitamos influyen en nuestra percepción."
+      />
+
+      <Section>
+        <div className="relative aspect-[3/2] overflow-hidden bg-line">
           <Image
-            src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?auto=format&fit=crop&w=1600&q=90"
-            alt="Bárbara Gamiz en su estudio"
+            src={`${CLOUDINARY}/v1788288990/20240618Ba_%C3%BCrbaraGamiz-1_q1eox4.jpg`}
+            alt="Bárbara Gamiz frente a una de sus pinturas en azul"
             fill
             priority
-            sizes="(max-width: 768px) 100vw, 60vw"
-            className="object-cover grayscale"
+            sizes="(max-width: 768px) 100vw, 1040px"
+            className="object-cover"
           />
         </div>
-      </section>
+      </Section>
 
-      <section className="bg-paper py-24 md:py-36">
-        <div className="page-shell grid gap-16 md:grid-cols-2 md:gap-28">
-          <div className="relative aspect-[4/5] bg-line">
+      <Section tone="paper">
+        <div className="grid gap-12 md:grid-cols-2 md:items-center md:gap-16">
+          <div className="relative aspect-[4/5] overflow-hidden bg-line">
             <Image
-              src="https://images.unsplash.com/photo-1605429523419-d828acb941d9?auto=format&fit=crop&w=1400&q=90"
-              alt="Proceso de trabajo en el estudio"
+              src={`${CLOUDINARY}/v1788288982/BGP_ESTUDIO_GLASSELL_tyhmmm.jpg`}
+              alt="Bárbara Gamiz pintando un lienzo de gran formato subida a una escalera"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
             />
           </div>
-          <div className="flex flex-col justify-center">
-            <p className="text-[0.66rem] uppercase tracking-[0.3em] text-accent">
-              Práctica
-            </p>
-            <h2 className="mt-6 font-serif text-5xl leading-[0.95] tracking-[-0.035em] md:text-7xl">
-              Entre la intuición y la materia
-            </h2>
-            <div className="mt-9 space-y-6 text-sm font-light leading-8 text-muted">
+          <div className="flex flex-col">
+            <Eyebrow className="mb-5">Práctica</Eyebrow>
+            <h2 className="type-title text-ink">Entre la intuición y la materia</h2>
+            <div className="type-body stack-header flex flex-col gap-6 text-muted">
               <p>
                 Trabajo principalmente con pintura, cerámica, madera y metal.
                 Me acerco a cada material atendiendo a sus tiempos, resistencias
@@ -79,29 +70,29 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="page-shell py-24 md:py-36">
-        <SectionTitle
-          eyebrow="Trayectoria"
-          title="Exposiciones y proyectos"
-          description="Una selección de exhibiciones, colaboraciones y periodos de investigación recientes."
+      <Section>
+        <SectionHeader
+          eyebrow="Prensa"
+          title="Publicaciones y entrevistas"
+          description="A lo largo de mi trayectoria he tenido la oportunidad de compartir mi trabajo en distintos medios y proyectos que han contribuido a difundir mi práctica artística."
         />
-        <div className="mt-16 md:mt-24">
-          {milestones.map(([year, title, place]) => (
-            <div
-              key={`${year}-${title}`}
-              className="grid gap-3 border-t border-line py-7 md:grid-cols-[0.2fr_1fr_1fr] md:items-center"
-            >
-              <p className="text-xs text-accent">{year}</p>
-              <h3 className="font-serif text-3xl">{title}</h3>
-              <p className="text-sm font-light text-muted md:text-right">
-                {place}
-              </p>
-            </div>
-          ))}
+        <div className="stack-header">
+          <EditorialList>
+            {press.map((item) => (
+              <EditorialRow
+                key={`${item.medio}-${item.anio}-${item.titulo ?? ""}`}
+                meta={item.anio}
+                title={item.medio}
+                description={item.titulo}
+                href={item.url}
+                external
+              />
+            ))}
+          </EditorialList>
         </div>
-      </section>
+      </Section>
     </>
   );
 }

@@ -18,5 +18,5 @@ export const structure: StructureResolver = (S, context) =>
         context,
       }),
       S.divider(),
-      S.documentTypeListItem("post").title("Notas / Blog"),
+      S.documentTypeListItem("post").title("Blog"),
     ]);

@@ -1,13 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Artwork, ArtworkCategory, Serie } from "@/types";
 import { ArtworkCard } from "./ArtworkCard";
+import { ArtworkGrid } from "./ArtworkGrid";
 import { SerieCard } from "./SerieCard";
 
-type Filter = "Todas" | ArtworkCategory;
+const filters: ArtworkCategory[] = ["Pintura", "Escultura"];
 
-const filters: Filter[] = ["Todas", "Pintura", "Escultura"];
+// La disciplina viaja en la URL (?disciplina=escultura) para poder enlazarla
+// desde la portada y compartirla.
+const PARAM = "disciplina";
+
+function categoryFromParam(value: string | null): ArtworkCategory {
+  return value === "escultura" ? "Escultura" : "Pintura";
+}
 
 export function ArtworkGallery({
   series,
@@ -17,29 +24,40 @@ export function ArtworkGallery({
   /** Solo obras únicas: las de una serie se ven dentro de su tarjeta. */
   artworks: Artwork[];
 }) {
-  const [filter, setFilter] = useState<Filter>("Todas");
+  const [filter, setFilter] = useState<ArtworkCategory>("Pintura");
 
-  const matches = (categoria: ArtworkCategory) =>
-    filter === "Todas" || categoria === filter;
+  // Se lee en el cliente para que la página siga siendo estática.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setFilter(categoryFromParam(params.get(PARAM)));
+  }, []);
 
-  const visibleSeries = series.filter((serie) => matches(serie.categoria));
-  const visibleArtworks = artworks.filter((artwork) =>
-    matches(artwork.categoria)
+  const select = (item: ArtworkCategory) => {
+    setFilter(item);
+    const url = new URL(window.location.href);
+    url.searchParams.set(PARAM, item.toLowerCase());
+    window.history.replaceState(null, "", url);
+  };
+
+  const visibleSeries = series.filter((serie) => serie.categoria === filter);
+  const visibleArtworks = artworks.filter(
+    (artwork) => artwork.categoria === filter
   );
   const isEmpty = !visibleSeries.length && !visibleArtworks.length;
 
   return (
     <>
-      <div className="mb-14 flex flex-wrap gap-3 border-b border-line pb-6">
+      <div className="flex flex-wrap gap-x-8 border-b border-line">
         {filters.map((item) => (
           <button
             key={item}
             type="button"
-            onClick={() => setFilter(item)}
-            className={`px-5 py-3 text-[0.65rem] uppercase tracking-[0.2em] transition-colors ${
+            aria-pressed={filter === item}
+            onClick={() => select(item)}
+            className={`type-eyebrow -mb-px border-b py-4 transition-colors ${
               filter === item
-                ? "bg-ink text-paper"
-                : "border border-line hover:border-ink"
+                ? "border-ink text-ink"
+                : "border-transparent text-muted hover:text-ink"
             }`}
           >
             {item}
@@ -48,22 +66,22 @@ export function ArtworkGallery({
       </div>
 
       {isEmpty ? (
-        <p className="py-16 text-center text-[14px] leading-6 text-muted">
+        <p className="type-body stack-header text-center text-muted">
           Todavía no hay obras en esta categoría.
         </p>
       ) : (
-        <div className="grid gap-x-7 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        <ArtworkGrid className="stack-header">
           {visibleSeries.map((serie, index) => (
-            <SerieCard key={serie.id} serie={serie} priority={index < 3} />
+            <SerieCard key={serie.id} serie={serie} priority={index < 2} />
           ))}
           {visibleArtworks.map((artwork, index) => (
             <ArtworkCard
               key={artwork.id}
               artwork={artwork}
-              priority={!visibleSeries.length && index < 3}
+              priority={!visibleSeries.length && index < 2}
             />
           ))}
-        </div>
+        </ArtworkGrid>
       )}
     </>
   );

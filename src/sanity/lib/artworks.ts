@@ -12,6 +12,7 @@ import {
   serieSlugsQuery,
   standaloneArtworksQuery,
 } from "./queries";
+import { imageFormat } from "@/lib/imageFormat";
 import type { Artwork, Serie } from "@/types";
 import {
   artworks as staticArtworks,
@@ -30,6 +31,7 @@ type SanityArtwork = {
   dimensiones?: string;
   anio?: number;
   imagen?: Image;
+  imagenDimensiones?: { width: number; height: number } | null;
   serie?: { _id: string; titulo: string; slug: string } | null;
 };
 
@@ -57,6 +59,11 @@ function mapArtwork(doc: SanityArtwork): Artwork {
     dimensiones: doc.dimensiones,
     año: doc.anio,
     imagen: imageUrl(doc.imagen),
+    // Sin ancho ni calidad: quien la use pide a Sanity el tamaño exacto, así
+    // la imagen se comprime una sola vez.
+    imagenBase: doc.imagen ? urlFor(doc.imagen).url() : undefined,
+    imagenAncho: doc.imagenDimensiones?.width,
+    imagenAlto: doc.imagenDimensiones?.height,
     destacada: true,
     serie: doc.serie
       ? { id: doc.serie._id, slug: doc.serie.slug, titulo: doc.serie.titulo }
@@ -73,14 +80,25 @@ function mapSerie(doc: SanitySerie): Serie {
     new Set(obras.map((obra) => obra.tecnica).filter(Boolean))
   );
 
+  // Sin portada propia, la primera obra con imagen hace de portada.
+  const ownCover = imageUrl(doc.portada);
+  const coverArtwork = obras.find((obra) => obra.imagen);
+
   return {
     id: doc._id,
     slug: doc.slug,
     titulo: doc.titulo,
     categoria: doc.categoria,
     descripcion: doc.descripcion,
-    // Sin portada propia, la primera obra con imagen hace de portada.
-    portada: imageUrl(doc.portada) || obras.find((obra) => obra.imagen)?.imagen || "",
+    portada: ownCover || coverArtwork?.imagen || "",
+    // La portada propia no trae medidas: se decide por la categoría.
+    portadaFormato: ownCover
+      ? imageFormat(undefined, undefined, doc.categoria)
+      : imageFormat(
+          coverArtwork?.imagenAncho,
+          coverArtwork?.imagenAlto,
+          doc.categoria
+        ),
     obras,
     totalObras: obras.length,
     anioInicio: years.length ? Math.min(...years) : undefined,
@@ -99,6 +117,15 @@ export async function getAllArtworks(): Promise<Artwork[]> {
   if (!isSanityConfigured) return staticArtworks;
   const docs = await client.fetch<SanityArtwork[]>(allArtworksQuery);
   return docs.map(mapArtwork);
+}
+
+/** Obras concretas por slug, en el orden pedido; las que no existan se omiten. */
+export async function getArtworksBySlugs(slugs: string[]): Promise<Artwork[]> {
+  const all = await getAllArtworks();
+  const bySlug = new Map(all.map((artwork) => [artwork.slug, artwork]));
+  return slugs
+    .map((slug) => bySlug.get(slug))
+    .filter((artwork): artwork is Artwork => Boolean(artwork));
 }
 
 /** Obras que no pertenecen a ninguna serie. */

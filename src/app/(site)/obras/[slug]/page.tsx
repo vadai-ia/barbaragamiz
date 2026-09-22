@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArtworkCard } from "@/components/artworks/ArtworkCard";
-import { SectionTitle } from "@/components/ui/SectionTitle";
+import { ArtworkGrid } from "@/components/artworks/ArtworkGrid";
+import { ActionLink } from "@/components/ui/ActionLink";
+import { ButtonLink } from "@/components/ui/Button";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+import { Section } from "@/components/ui/Section";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { SerieBadge } from "@/components/ui/SerieBadge";
+import { whatsappUrl } from "@/lib/constants";
 import {
   getAllArtworks,
   getArtwork,
   getArtworkSlugs,
 } from "@/sanity/lib/artworks";
+import type { Artwork } from "@/types";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -38,6 +45,48 @@ export async function generateMetadata({
   };
 }
 
+const frame =
+  "border-[6px] border-white shadow-[6px_6px_18px_rgba(0,0,0,0.18)]";
+
+/** La obra enmarcada a su proporción real, lo más grande que quepa. */
+function ArtworkImage({ artwork }: { artwork: Artwork }) {
+  if (!artwork.imagen) {
+    return (
+      <div className="type-eyebrow flex aspect-[4/3] w-full max-w-2xl items-center justify-center bg-line text-muted">
+        Sin imagen
+      </div>
+    );
+  }
+
+  if (artwork.imagenAncho && artwork.imagenAlto) {
+    return (
+      <Image
+        src={artwork.imagen}
+        alt={artwork.titulo}
+        width={artwork.imagenAncho}
+        height={artwork.imagenAlto}
+        priority
+        sizes="(max-width: 768px) 90vw, 900px"
+        className={`h-auto max-h-[min(70vh,44rem)] w-auto max-w-full ${frame}`}
+      />
+    );
+  }
+
+  // Sin proporciones conocidas (datos de respaldo): caja fija sin recorte.
+  return (
+    <div className="relative aspect-[4/3] w-full">
+      <Image
+        src={artwork.imagen}
+        alt={artwork.titulo}
+        fill
+        priority
+        sizes="(max-width: 768px) 90vw, 900px"
+        className="object-contain"
+      />
+    </div>
+  );
+}
+
 export default async function ArtworkDetailPage({
   params,
 }: ArtworkDetailPageProps) {
@@ -53,93 +102,104 @@ export default async function ArtworkDetailPage({
   const siblings = artwork.serie
     ? others.filter((item) => item.serie?.slug === artwork.serie?.slug)
     : [];
-  const related = (siblings.length ? siblings : others).slice(0, 10);
+  // Número par: la cuadrícula es de dos columnas.
+  const related = (siblings.length ? siblings : others).slice(0, 8);
+
+  // El mensaje se arma con lo que haya en Sanity: las obras nuevas lo tienen
+  // sin tocar nada, y lo que falte simplemente no se menciona.
+  const detalles = [
+    artwork.serie ? `de la serie ${artwork.serie.titulo}` : null,
+    artwork.dimensiones ? `(${artwork.dimensiones})` : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const mensajeWhatsapp = `Hola, me interesa la obra "${artwork.titulo}"${
+    detalles ? ` ${detalles}` : ""
+  }. ¿Me puedes dar más información?`;
+
+  const specs = [
+    ["Técnica", artwork.tecnica],
+    ["Dimensiones", artwork.dimensiones],
+    ["Año", artwork.año],
+  ].filter(([, value]) => value);
 
   return (
     <>
-      <section className="page-shell grid gap-12 py-12 md:grid-cols-[1.35fr_0.65fr] md:gap-20 md:py-20">
-        <div className="relative min-h-[560px] bg-line md:min-h-[calc(100vh-10rem)]">
-          {artwork.imagen ? (
-            <Image
-              src={artwork.imagen}
-              alt={artwork.titulo}
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 68vw"
-              className="object-cover"
-            />
+      <article className="page-shell pt-8 pb-10 md:pt-12 md:pb-16">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          {artwork.serie ? (
+            <ActionLink href={`/obras/serie/${artwork.serie.slug}`} back>
+              Serie {artwork.serie.titulo}
+            </ActionLink>
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-[11px] uppercase tracking-[0.2em] text-muted">
-              Sin imagen
-            </div>
+            <ActionLink href="/obras" back>
+              Volver a la galería
+            </ActionLink>
           )}
+          <Eyebrow>
+            {artwork.categoria} · {artwork.serie ? "Obra de serie" : "Obra única"}
+          </Eyebrow>
         </div>
 
-        <div className="flex flex-col justify-center md:sticky md:top-10 md:h-[calc(100vh-5rem)]">
-          <p className="text-[0.66rem] uppercase tracking-[0.3em] text-accent">
-            {artwork.categoria}
-          </p>
-          <h1 className="mt-6 font-serif text-6xl leading-[0.85] tracking-[-0.045em] md:text-8xl">
-            {artwork.titulo}
-          </h1>
+        {/* La obra, arriba y en grande. */}
+        <div className="mt-6 flex items-center justify-center bg-card px-6 py-12 sm:px-10 md:mt-8 md:px-16 md:py-20">
+          <ArtworkImage artwork={artwork} />
+        </div>
 
-          {artwork.serie && (
-            <Link
-              href={`/obras/serie/${artwork.serie.slug}`}
-              className="mt-6 inline-block self-start border-b border-line pb-1 text-[0.68rem] uppercase tracking-[0.2em] text-muted transition-colors hover:border-ink hover:text-ink"
-            >
-              Serie · {artwork.serie.titulo}
-            </Link>
-          )}
-
-          <dl className="mt-10 divide-y divide-line border-y border-line text-sm">
-            <div className="flex justify-between gap-6 py-4">
-              <dt className="text-muted">Técnica</dt>
-              <dd className="text-right">{artwork.tecnica}</dd>
+        {/* Ficha: título, datos y contacto en una fila. */}
+        <div className="flex flex-col gap-8 border-b border-line py-10 md:flex-row md:items-start md:justify-between md:gap-12">
+          <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-14">
+            <div className="flex flex-col items-start gap-4 md:max-w-[16rem]">
+              <h1 className="type-heading uppercase text-ink">
+                {artwork.titulo}
+              </h1>
+              {artwork.serie && (
+                <SerieBadge href={`/obras/serie/${artwork.serie.slug}`}>
+                  Serie · {artwork.serie.titulo}
+                </SerieBadge>
+              )}
             </div>
-            <div className="flex justify-between gap-6 py-4">
-              <dt className="text-muted">Dimensiones</dt>
-              <dd>{artwork.dimensiones}</dd>
-            </div>
-            <div className="flex justify-between gap-6 py-4">
-              <dt className="text-muted">Año</dt>
-              <dd>{artwork.año}</dd>
-            </div>
-          </dl>
-
-          <Link
-            href={`/contacto?obra=${artwork.slug}`}
-            className="mt-10 bg-ink px-8 py-5 text-center text-[0.67rem] uppercase tracking-[0.2em] text-paper transition-colors hover:bg-accent"
+            {specs.length > 0 && (
+              <dl className="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 md:flex md:gap-14">
+                {specs.map(([label, value]) => (
+                  <div key={label as string}>
+                    <dt className="type-small font-medium text-ink">{label}</dt>
+                    <dd className="type-small mt-1 text-muted">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </div>
+          <ButtonLink
+            href={whatsappUrl(mensajeWhatsapp)}
+            external
+            className="shrink-0 self-start"
           >
-            Contactar al artista
-          </Link>
+            Contactar a la artista
+          </ButtonLink>
         </div>
-      </section>
+      </article>
 
       {related.length > 0 && (
-        <section className="bg-paper py-24 md:py-36">
-          <div className="page-shell">
-            <SectionTitle
-              eyebrow={
-                siblings.length ? "Misma serie" : "Continúa explorando"
-              }
-              title={
-                siblings.length && artwork.serie
-                  ? artwork.serie.titulo
-                  : "Obras relacionadas"
-              }
-            />
-            <div className="mt-16 grid gap-x-7 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((item) => (
-                <ArtworkCard
-                  key={item.id}
-                  artwork={item}
-                  showSerie={!siblings.length}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
+        <Section tone="paper">
+          <SectionHeader
+            eyebrow={siblings.length ? "Misma serie" : "Continúa explorando"}
+            title={
+              siblings.length && artwork.serie
+                ? artwork.serie.titulo
+                : "Obras relacionadas"
+            }
+          />
+          <ArtworkGrid className="stack-header">
+            {related.map((item) => (
+              <ArtworkCard
+                key={item.id}
+                artwork={item}
+                showSerie={!siblings.length}
+              />
+            ))}
+          </ArtworkGrid>
+        </Section>
       )}
     </>
   );

@@ -9,7 +9,9 @@
   --color-line: #d8d2c8;
   --color-accent: #a34f34;
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-serif: var(--font-cormorant);
+  /* Respaldo explícito: si la variable de next/font faltara, la regla no se
+     invalida y los títulos siguen en serif en vez de caer a la sans. */
+  --font-serif: var(--font-cormorant, "Cormorant Garamond"), Georgia, serif;
 }
 
 * {
@@ -54,4 +56,171 @@ a {
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* ── Sistema editorial ──────────────────────────────────────────────────
+   Única escala tipográfica y único ritmo vertical del sitio. Ningún texto
+   debe llevar tamaños sueltos: se elige uno de estos roles y el color va
+   aparte (text-ink, text-muted, text-accent).
+
+   type-display  Título de página (h1). Uno por página, siempre en PageHero.
+   type-title    Título de sección (h2), en SectionHeader.
+   type-heading  Título de bloque: disciplinas, filas de lista, fichas.
+   type-lead     Entradilla en serif.
+   type-body     Prosa corrida.
+   type-small    Texto en columnas estrechas, pies de tarjeta, datos.
+   type-eyebrow  Etiqueta sobre títulos, enlaces de acción y botones.
+   ──────────────────────────────────────────────────────────────────── */
+
+/* Título del hero de portada, sobre la obra a pantalla completa. Solo ahí. */
+@utility type-hero {
+  font-family: var(--font-serif);
+  font-size: clamp(4.5rem, 10vw, 9rem);
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+}
+
+@utility type-display {
+  font-family: var(--font-serif);
+  font-size: clamp(3.25rem, 7vw, 6.5rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+}
+
+@utility type-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+}
+
+@utility type-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+@utility type-lead {
+  font-family: var(--font-serif);
+  font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+@utility type-body {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.85;
+}
+
+@utility type-small {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+@utility type-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Etiquetas pequeñas sobre fondo sólido (p. ej. "Serie"). Más discreta que
+   type-eyebrow para no competir con la obra. */
+@utility type-label {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Aparición al hacer scroll (componente Reveal).
+   Solo se oculta de entrada si hay JavaScript y el usuario no pidió reducir
+   el movimiento: en cualquier otro caso el contenido se ve desde el principio. */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms),
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
+  }
+}
+
+/* Movimiento del hero de portada */
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Entrada del título. */
+@utility animate-hero-rise {
+  animation: hero-rise 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Relleno de la línea de progreso; la duración la fija el componente. */
+@utility animate-hero-progress {
+  animation-name: hero-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-rise,
+  .animate-hero-progress {
+    animation: none;
+  }
+}
+
+/* Ritmo vertical */
+
+/* Separación entre secciones. */
+@utility section-y {
+  padding-block: clamp(4.5rem, 9vw, 7.5rem);
+}
+
+/* Aire sobre el título de página. */
+@utility hero-top {
+  padding-top: clamp(3.5rem, 7vw, 6rem);
+}
+
+/* Aire bajo el título de página, antes de su filete. */
+@utility hero-bottom {
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+/* Distancia entre una cabecera de sección y su contenido. */
+@utility stack-header {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
 }
