@@ -36,6 +36,20 @@ export const serie = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "subtitulo",
+      title: "Subtítulo",
+      type: "string",
+      description:
+        'Línea bajo el título, para proyectos. Por ejemplo: "Artist Residency · Houston, Texas · 2017".',
+    }),
+    defineField({
+      name: "tituloObra",
+      title: "Título de la obra",
+      type: "string",
+      description:
+        'Encabeza el texto de la página. Por ejemplo: "Empowering Women".',
+    }),
+    defineField({
       name: "descripcion",
       title: "Descripción",
       type: "text",

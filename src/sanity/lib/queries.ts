@@ -18,6 +18,8 @@ const serieFields = groq`
   titulo,
   "slug": slug.current,
   categoria,
+  subtitulo,
+  tituloObra,
   descripcion,
   portada,
   "obras": *[_type == "artwork" && references(^._id)] | order(orderRank) {

@@ -40,6 +40,8 @@ type SanitySerie = {
   titulo: string;
   slug: string;
   categoria: Artwork["categoria"];
+  subtitulo?: string;
+  tituloObra?: string;
   descripcion?: string;
   portada?: Image;
   obras?: SanityArtwork[];
@@ -89,6 +91,8 @@ function mapSerie(doc: SanitySerie): Serie {
     slug: doc.slug,
     titulo: doc.titulo,
     categoria: doc.categoria,
+    subtitulo: doc.subtitulo,
+    tituloObra: doc.tituloObra,
     descripcion: doc.descripcion,
     portada: ownCover || coverArtwork?.imagen || "",
     // La portada propia no trae medidas: se decide por la categoría.

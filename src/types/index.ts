@@ -35,6 +35,10 @@ export interface Serie {
   slug: string;
   titulo: string;
   categoria: ArtworkCategory;
+  /** Solo en proyectos: "Artist Residency · Houston, Texas · 2017". */
+  subtitulo?: string;
+  /** Solo en proyectos: encabeza el texto, p. ej. "Empowering Women". */
+  tituloObra?: string;
   descripcion?: string;
   /** Portada propia o, si no la hay, la imagen de la primera obra. */
   portada: string;
