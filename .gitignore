@@ -11,6 +11,9 @@
 # ── Next.js (compilados y caché) ─────────────────────────────
 /.next/
 /out/
+
+# paquetes para subir al hosting
+*.zip
 /build
 next-env.d.ts
 *.tsbuildinfo

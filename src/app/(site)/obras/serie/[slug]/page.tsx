@@ -9,7 +9,9 @@ import { getSerie, getSerieSlugs } from "@/sanity/lib/artworks";
 import type { Serie } from "@/types";
 
 export const revalidate = 60;
-export const dynamicParams = true;
+// Export estático: solo existen las páginas generadas en el build. Una obra
+// publicada después no tendrá página hasta la siguiente reconstrucción.
+export const dynamicParams = false;
 
 interface SeriePageProps {
   params: Promise<{ slug: string }>;

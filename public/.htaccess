@@ -1,0 +1,32 @@
+# Reglas del sitio publicado en Hostinger (LiteSpeed lee este fichero).
+#
+# Vive en public/, así que el build lo copia solo a la raíz de "out" y se sube
+# junto al resto. No hay que acordarse de nada.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # El blog pasó a llamarse Exposiciones. Las direcciones antiguas quedaron
+  # publicadas, así que siguen llevando al sitio correcto.
+  RewriteRule ^blog/?$ /exposiciones/ [R=301,L]
+  RewriteRule ^blog/(.+?)/?$ /exposiciones/$1/ [R=301,L]
+
+  # El panel de Sanity es una aplicación de navegador: maneja sus propias
+  # direcciones internas (/studio/structure, /studio/vision...), que no
+  # existen como ficheros. Sin esta regla, recargar estando dentro del panel
+  # daría un 404.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^studio(/.*)?$ /studio/index.html [L]
+</IfModule>
+
+# Las páginas se regeneran en cada build; que el navegador no sirva una vieja.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # Los ficheros de /_next/static llevan huella en el nombre: nunca cambian.
+  <FilesMatch "\.(js|css|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>

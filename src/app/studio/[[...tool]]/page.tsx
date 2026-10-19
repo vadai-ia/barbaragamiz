@@ -3,6 +3,16 @@ import Studio from "./Studio";
 
 export const dynamic = "force-static";
 
+/**
+ * En exportación estática hay que declarar qué páginas existen. Del panel solo
+ * se genera la raíz: sus direcciones internas (/studio/structure, /studio/vision)
+ * las resuelve el propio panel en el navegador, y el .htaccess se encarga de
+ * que al recargar en cualquiera de ellas se sirva esta misma página.
+ */
+export function generateStaticParams() {
+  return [{ tool: [] }];
+}
+
 export { metadata, viewport } from "next-sanity/studio";
 
 export default function StudioPage() {
