@@ -1,4 +1,4 @@
-export type ArtworkCategory = "Pintura" | "Escultura";
+export type ArtworkCategory = "Pintura" | "Escultura" | "Fotografía";
 
 /** Referencia ligera a la serie a la que pertenece una obra. */
 export interface SerieRef {

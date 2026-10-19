@@ -18,7 +18,7 @@ export function SocialIcons({ className = "" }: { className?: string }) {
           aria-label={label}
           className="transition-opacity hover:opacity-50"
         >
-          <Icon size={18} strokeWidth={1.5} />
+          <Icon size={20} strokeWidth={1.6} />
         </a>
       ))}
     </div>

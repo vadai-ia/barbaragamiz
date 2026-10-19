@@ -49,6 +49,32 @@ a {
   }
 }
 
+/* Franja a sangre: la cabecera y el hero de portada van pegados al borde de
+   la pantalla, no a la caja de lectura de 1040 px. Así el logo y el título
+   arrancan a la izquierda, como en la maqueta. */
+.page-bleed {
+  width: 100%;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .page-bleed {
+    padding-inline: clamp(2rem, 4.5vw, 4.5rem);
+  }
+}
+
+/* Caja un 20 % más ancha que page-shell, para el bloque de filosofía. */
+.page-plus {
+  margin-inline: auto;
+  width: min(100% - 2.5rem, 1248px);
+}
+
+@media (min-width: 768px) {
+  .page-plus {
+    width: min(100% - 6rem, 1248px);
+  }
+}
+
 /* Hide scrollbar for horizontal galleries while keeping scroll */
 .no-scrollbar {
   scrollbar-width: none;
@@ -70,6 +96,9 @@ a {
    type-body     Prosa corrida.
    type-small    Texto en columnas estrechas, pies de tarjeta, datos.
    type-eyebrow  Etiqueta sobre títulos, enlaces de acción y botones.
+   type-nav      Enlaces del menú principal.
+   type-body-lg  Prosa corrida en bloques con presencia (filosofía de portada).
+   type-caption  Ficha técnica al pie de una obra: título y medida, discretos.
    ──────────────────────────────────────────────────────────────────── */
 
 /* Título del hero de portada, sobre la obra a pantalla completa. Solo ahí. */
@@ -77,8 +106,8 @@ a {
   font-family: var(--font-serif);
   font-size: clamp(4.5rem, 10vw, 9rem);
   font-weight: 400;
-  line-height: 0.8;
-  letter-spacing: -0.05em;
+  line-height: 0.88;
+  letter-spacing: 0.02em;
 }
 
 @utility type-display {
@@ -122,6 +151,27 @@ a {
   font-family: var(--font-sans);
   font-size: 0.875rem;
   line-height: 1.6;
+}
+
+@utility type-nav {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+@utility type-body-lg {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+
+/* Deliberadamente menor que type-small: la ficha no compite con la obra. */
+@utility type-caption {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
 }
 
 @utility type-eyebrow {

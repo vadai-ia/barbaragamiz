@@ -30,20 +30,20 @@ export const press: PressItem[] = [
     destacada: true,
   },
   {
+    // Sitio suspendido (sep. 2026): la nota ya no es accesible.
     anio: 2025,
     medio: "Hola Polanco",
     titulo: "Reflejos de la Tierra: arte, conciencia y naturaleza en Be by Bloom",
-    url: "https://www.holapolanco.com/recomendaciones/reflejos-de-la-tierra-arte-conciencia-y-naturaleza-en-beby-bloom/",
-    destacada: true,
   },
   {
+    // El dominio masaryk.tv dejó de existir (sep. 2026).
     anio: 2025,
     medio: "Masaryk TV",
     titulo: "Estilo Socialité: Reflejos de la Tierra en Be by Bloomm",
-    url: "https://masaryk.tv/285411/la-galeria-de-arte-be-by-bloomm-presenta-reflejos-de-la-tierra-una-odacreativa-a-la-majestuosidad-natural",
-    destacada: true,
   },
   {
+    // TODO: sustituir por la entrevista completa cuando Bárbara facilite el
+    // enlace; este reel de Instagram es solo un fragmento.
     anio: 2025,
     medio: "FORO TV",
     titulo: "Expreso de la Mañana, con Héctor Alonso",

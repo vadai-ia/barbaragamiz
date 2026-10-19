@@ -34,7 +34,7 @@ export function PostCard({ post }: { post: Post }) {
               <p className="type-small text-muted">{post.extracto}</p>
             )}
             <Link
-              href={`/blog/${post.slug}`}
+              href={`/exposiciones/${post.slug}`}
               aria-label={`Leer ${post.titulo}`}
               className="group inline-flex h-10 w-10 items-center justify-center bg-ink text-paper transition-colors hover:bg-accent"
             >

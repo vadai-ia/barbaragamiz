@@ -6,9 +6,12 @@ import { SocialIcons } from "@/components/ui/SocialIcons";
 export function Footer() {
   return (
     <footer className="bg-ink text-white">
-      <div className="page-shell flex flex-col gap-16 pt-16 pb-28 md:flex-row md:items-start md:justify-between md:pt-[66px] md:pb-40">
-        <div className="max-w-sm">
+      <div className="page-shell flex flex-col gap-16 pt-16 pb-16 md:flex-row md:items-start md:justify-between md:pt-[66px] md:pb-20">
+        {/* La firma acompaña al logo en la misma línea, discreta y desplazada
+            a la derecha, como una marca de agua. */}
+        <div className="flex max-w-sm items-center gap-5">
           <Logo inverse />
+          <span className="type-caption text-white/40">The Art of Being You</span>
         </div>
 
         <div className="flex gap-16 md:gap-[72px]">
@@ -34,6 +37,12 @@ export function Footer() {
             <SocialIcons className="text-white" />
           </div>
         </div>
+      </div>
+
+      <div className="page-shell border-t border-white/10 py-8">
+        <p className="type-caption text-white/40">
+          © 2026 Bárbara Gámiz. Todos los derechos reservados.
+        </p>
       </div>
     </footer>
   );

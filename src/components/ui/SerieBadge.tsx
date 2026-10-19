@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { Layers } from "lucide-react";
 
-const styles =
-  "type-label inline-flex items-center gap-1.5 bg-ink px-2.5 py-1.5 text-paper";
-
-/**
- * Etiqueta negra que marca que algo pertenece a una serie. Con `href` es un
- * enlace; sin él, un texto (dentro de tarjetas que ya son enlaces).
+/*
+ * Antes era un rectángulo negro y se leía antes que la propia obra. Ahora es
+ * solo texto en terracota: marca la pertenencia a una serie sin competir con
+ * la pintura que tiene al lado.
  */
+const styles =
+  "type-label inline-flex items-center text-accent transition-opacity";
+
 export function SerieBadge({
   children,
   href,
@@ -17,23 +17,13 @@ export function SerieBadge({
   href?: string;
   className?: string;
 }) {
-  const content = (
-    <>
-      <Layers size={11} strokeWidth={2} aria-hidden />
-      {children}
-    </>
-  );
-
   if (href) {
     return (
-      <Link
-        href={href}
-        className={`${styles} transition-colors hover:bg-accent ${className}`}
-      >
-        {content}
+      <Link href={href} className={`${styles} hover:opacity-60 ${className}`}>
+        {children}
       </Link>
     );
   }
 
-  return <span className={`${styles} ${className}`}>{content}</span>;
+  return <span className={`${styles} ${className}`}>{children}</span>;
 }

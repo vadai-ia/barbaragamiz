@@ -27,10 +27,10 @@ export function imageFormat(
  */
 export function frameSize(format: ImageFormat, horizontalAspect = "aspect-[3/2]") {
   if (format === "vertical") {
-    return "aspect-[3/4] w-[70%] md:h-[320px] md:w-auto lg:h-[340px]";
+    return "aspect-[3/4] w-[82%] md:h-[360px] md:w-auto lg:h-[390px]";
   }
   if (format === "cuadrada") {
-    return "aspect-square w-[75%] md:h-[260px] md:w-auto lg:h-[300px]";
+    return "aspect-square w-[85%] md:h-[300px] md:w-auto lg:h-[330px]";
   }
-  return `w-[80%] ${horizontalAspect}`;
+  return `w-[92%] ${horizontalAspect}`;
 }

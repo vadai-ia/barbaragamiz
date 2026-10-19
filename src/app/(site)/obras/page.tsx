@@ -7,7 +7,7 @@ import { getAllSeries, getStandaloneArtworks } from "@/sanity/lib/artworks";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Galería de obras",
+  title: "Obras",
   description: "Galería de pintura y escultura de Bárbara Gamiz.",
 };
 

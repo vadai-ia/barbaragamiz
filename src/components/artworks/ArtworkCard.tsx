@@ -30,11 +30,11 @@ export function ArtworkCard({
   return (
     <Link
       href={`/obras/${artwork.slug}`}
-      className="group flex h-full flex-col justify-between bg-card p-6 transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.10)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:p-8 md:h-[520px]"
+      className="group flex h-full flex-col justify-between bg-card p-4 transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.10)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:p-5 md:h-[540px]"
     >
       {serie && (
         <div className="mb-5 flex justify-center">
-          <SerieBadge className="transition-colors group-hover:bg-accent">
+          <SerieBadge className="group-hover:opacity-60">
             Serie · {serie.titulo}
           </SerieBadge>
         </div>
@@ -63,9 +63,9 @@ export function ArtworkCard({
           )}
         </div>
       </div>
-      <div className="mt-6 flex items-end justify-between gap-4">
-        <span className="type-small font-medium text-ink">{artwork.titulo}</span>
-        <span className="type-small text-right text-muted">
+      <div className="mt-5 flex items-baseline justify-between gap-4">
+        <span className="type-caption text-ink/70">{artwork.titulo}</span>
+        <span className="type-caption text-right text-muted">
           {artwork.dimensiones}
         </span>
       </div>

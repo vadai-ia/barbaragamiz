@@ -83,10 +83,10 @@ export function ArtworkSlider({ artworks }: { artworks: Artwork[] }) {
       {/* Película mínima y solo donde hay texto: una banda corta arriba para el
           menú y la mitad inferior para el título. En negro, que oscurece sin
           agrisar; la mitad superior de la obra queda limpia. */}
-      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/35 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-black/55 via-black/20 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
 
-      <div className="page-shell relative z-10 flex h-full items-end pb-24 md:pb-28">
+      <div className="page-bleed relative z-10 flex h-full items-end pb-24 md:pb-28">
         {/* La sombra hace el trabajo que antes hacía la película. */}
         <h1 className="type-hero animate-hero-rise max-w-5xl [text-shadow:0_1px_3px_rgba(0,0,0,0.35),0_4px_40px_rgba(0,0,0,0.55)]">
           <span className="block">The Art</span>

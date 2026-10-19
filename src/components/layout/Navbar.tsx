@@ -33,10 +33,14 @@ export function Navbar() {
           : "bg-card/70 text-ink backdrop-blur-[25px]"
       }`}
     >
-      <div className="page-shell flex items-center justify-between py-6">
+      <div
+        className={`${
+          isHome ? "page-bleed" : "page-shell"
+        } flex items-center justify-between py-6`}
+      >
         <Logo inverse={overlay} />
 
-        <nav className="hidden items-center gap-4 lg:flex">
+        <nav className="hidden items-center gap-8 lg:flex">
           {navigation.map((item) => {
             const active =
               item.href === "/"
@@ -47,9 +51,11 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`type-small transition-opacity hover:opacity-60 ${
-                  active ? "underline underline-offset-2" : ""
-                }`}
+                className={`type-nav transition-opacity hover:opacity-60 ${
+                  overlay
+                    ? "[text-shadow:0_1px_4px_rgba(0,0,0,0.6)]"
+                    : ""
+                } ${active ? "underline underline-offset-4" : ""}`}
               >
                 {item.label}
               </Link>
@@ -58,7 +64,11 @@ export function Navbar() {
         </nav>
 
         <div className="hidden lg:block">
-          <SocialIcons />
+          <SocialIcons
+            className={
+              overlay ? "drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]" : undefined
+            }
+          />
         </div>
 
         <button
@@ -67,7 +77,9 @@ export function Navbar() {
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
           className={`grid h-11 w-11 place-items-center border transition-colors lg:hidden ${
-            overlay ? "border-paper/40" : "border-line"
+            overlay
+              ? "border-paper/60 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]"
+              : "border-line"
           }`}
         >
           {open ? <X size={20} /> : <Menu size={20} />}

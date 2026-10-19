@@ -4,12 +4,15 @@ import { Reveal } from "./Reveal";
 export function Section({
   children,
   tone = "canvas",
+  width = "normal",
   className = "",
   reveal = true,
 }: {
   children: React.ReactNode;
   /** "paper" pinta una banda clara a todo el ancho para alternar ritmo. */
   tone?: "canvas" | "paper";
+  /** "plus" ensancha la caja un 20 %, para bloques que piden presencia. */
+  width?: "normal" | "plus";
   className?: string;
   /** Aparición al entrar en pantalla. Desactívalo si estorba. */
   reveal?: boolean;
@@ -18,7 +21,13 @@ export function Section({
 
   return (
     <section className={tone === "paper" ? "bg-paper" : undefined}>
-      <div className={`page-shell section-y ${className}`}>{contenido}</div>
+      <div
+        className={`${
+          width === "plus" ? "page-plus" : "page-shell"
+        } section-y ${className}`}
+      >
+        {contenido}
+      </div>
     </section>
   );
 }

@@ -1,8 +1,8 @@
 export const navigation = [
   { label: "Inicio", href: "/" },
-  { label: "Galería de obras", href: "/obras" },
+  { label: "Obras", href: "/obras" },
   { label: "Sobre mí", href: "/sobre-mi" },
-  { label: "Blog", href: "/blog" },
+  { label: "Exposiciones", href: "/exposiciones" },
   { label: "Contacto", href: "/contacto" },
 ];
 

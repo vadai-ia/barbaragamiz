@@ -11,7 +11,32 @@ export default defineConfig({
   basePath: "/studio",
   projectId,
   dataset,
-  schema: { types: schemaTypes },
+  schema: {
+    types: schemaTypes,
+    // Un modelo de obra por disciplina: el botón "Nueva fotografía" del menú
+    // crea la obra con su categoría ya puesta.
+    templates: (prev) => [
+      ...prev,
+      {
+        id: "artwork-pintura",
+        title: "Pintura",
+        schemaType: "artwork",
+        value: { categoria: "Pintura" },
+      },
+      {
+        id: "artwork-escultura",
+        title: "Escultura",
+        schemaType: "artwork",
+        value: { categoria: "Escultura" },
+      },
+      {
+        id: "artwork-fotografia",
+        title: "Fotografía",
+        schemaType: "artwork",
+        value: { categoria: "Fotografía" },
+      },
+    ],
+  },
   plugins: [
     structureTool({ structure }),
     visionTool({ defaultApiVersion: apiVersion }),

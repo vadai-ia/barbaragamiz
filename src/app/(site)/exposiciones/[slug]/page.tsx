@@ -87,8 +87,8 @@ export default async function NotaPage({ params }: NotaPageProps) {
     <>
       <PageHero
         back={
-          <ActionLink href="/blog" back>
-            Volver al blog
+          <ActionLink href="/exposiciones" back>
+            Volver a exposiciones
           </ActionLink>
         }
         eyebrow={fechaYLugar(post.fecha, post.lugar)}

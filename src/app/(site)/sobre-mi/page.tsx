@@ -19,8 +19,8 @@ export default function AboutPage() {
     <>
       <PageHero
         eyebrow="Sobre mí"
-        title="El arte como forma de atención."
-        intro="Soy Bárbara Gamiz, artista plástica. Mi práctica surge del deseo de comprender cómo la materia guarda memoria y cómo los espacios que habitamos influyen en nuestra percepción."
+        title="El arte como forma de conexión."
+        intro="Mi trabajo nace de la necesidad de conectar con lo que sentimos. A través del color, la materia y las capas, busco dar forma a aquello que a veces no podemos expresar con palabras."
       />
 
       <Section>
@@ -50,22 +50,11 @@ export default function AboutPage() {
           <div className="flex flex-col">
             <Eyebrow className="mb-5">Práctica</Eyebrow>
             <h2 className="type-title text-ink">Entre la intuición y la materia</h2>
-            <div className="type-body stack-header flex flex-col gap-6 text-muted">
+            <div className="type-body-lg stack-header flex flex-col gap-6 text-muted">
               <p>
-                Trabajo principalmente con pintura, cerámica, madera y metal.
-                Me acerco a cada material atendiendo a sus tiempos, resistencias
-                y accidentes, permitiendo que el proceso también tome
-                decisiones.
-              </p>
-              <p>
-                La naturaleza, la arquitectura y los recuerdos personales
-                aparecen como puntos de partida. No busco representarlos
-                literalmente, sino traducir sus ritmos, tensiones y silencios.
-              </p>
-              <p>
-                Cada serie construye un lenguaje propio, aunque todas comparten
-                una pregunta por la permanencia y por la capacidad de una forma
-                para contener una experiencia.
+                Trabajo desde la intuición, dejando que cada obra encuentre su
+                propio camino. Entre capas, texturas y gestos, el proceso va
+                dejando huellas que se convierten en parte de la obra.
               </p>
             </div>
           </div>

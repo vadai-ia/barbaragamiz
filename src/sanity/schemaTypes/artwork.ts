@@ -28,6 +28,7 @@ export const artwork = defineType({
         list: [
           { title: "Pintura", value: "Pintura" },
           { title: "Escultura", value: "Escultura" },
+          { title: "Fotografía", value: "Fotografía" },
         ],
         layout: "radio",
       },

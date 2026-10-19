@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PostCard } from "@/components/blog/PostCard";
+import { PostCard } from "@/components/exposiciones/PostCard";
 import { PageHero } from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/Section";
 import { getAllPosts } from "@/sanity/lib/posts";
@@ -7,19 +7,19 @@ import { getAllPosts } from "@/sanity/lib/posts";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Exposiciones",
   description:
     "Exposiciones, ferias y novedades del trabajo de Bárbara Gamiz.",
 };
 
-export default async function BlogPage() {
+export default async function ExposicionesPage() {
   const posts = await getAllPosts();
 
   return (
     <>
       <PageHero
         eyebrow="Trayectoria"
-        title="Blog"
+        title="Exposiciones"
         intro="Exposiciones, ferias y novedades. Cada participación es una oportunidad para compartir el trabajo y conocer nuevas miradas."
       />
 
@@ -32,7 +32,7 @@ export default async function BlogPage() {
           </div>
         ) : (
           <p className="type-body text-center text-muted">
-            Todavía no hay entradas publicadas.
+            Todavía no hay exposiciones publicadas.
           </p>
         )}
       </Section>

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ArtworkSlider } from "@/components/artworks/ArtworkSlider";
 import { FeaturedWorksGrid } from "@/components/artworks/FeaturedWorksGrid";
-import { PostCard } from "@/components/blog/PostCard";
+import { PostCard } from "@/components/exposiciones/PostCard";
 import { SpacesGallery } from "@/components/spaces/SpacesGallery";
 import { ActionLink } from "@/components/ui/ActionLink";
 import { EditorialList, EditorialRow } from "@/components/ui/EditorialList";
@@ -10,11 +10,7 @@ import { ImageCarousel } from "@/components/ui/ImageCarousel";
 import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { featuredPress } from "@/data/press";
-import {
-  getAllArtworks,
-  getArtworksBySlugs,
-  getFeaturedArtworks,
-} from "@/sanity/lib/artworks";
+import { getArtworksBySlugs, getFeaturedArtworks } from "@/sanity/lib/artworks";
 import { getFeaturedPosts } from "@/sanity/lib/posts";
 
 export const revalidate = 60;
@@ -23,8 +19,26 @@ const CLOUDINARY = "https://res.cloudinary.com/dvxrojzi1/image/upload";
 
 // Scroll 1 · Hero. Obras horizontales, de alta resolución y que llenan el
 // lienzo de borde a borde: sin marco ni muro visibles, que a pantalla completa
-// delatan la foto. Un slug que no exista se omite solo.
-const heroSlugs = ["palpitaciones", "grafitopia", "enigma"];
+// delatan la foto. Un slug que no exista se omite solo, así que "ciudad"
+// entrará en el carrusel el día que se publique en el Studio.
+const heroSlugs = ["ciudad", "grafitopia", "retorica"];
+
+// Punto 9 · la selección de portada son diez pinturas de la carpeta PINTURA,
+// las de mayor formato. Quedan fuera Stain (55 x 76, la más pequeña), Dorado
+// Silencio e Ilusiones Lejanas; "Estar" todavía no está cargada en Sanity.
+// Si en el Studio se marca alguna obra como destacada, manda esa selección.
+const seleccionSlugs = [
+  "grafitopia",
+  "retorica",
+  "palpitaciones",
+  "umbral",
+  "respiracion",
+  "emociones",
+  "sonando",
+  "mantra",
+  "huellas-de-otono",
+  "ecos-de-la-tierra",
+];
 
 // Scroll 2 · Filosofía
 const philosophy = {
@@ -104,27 +118,18 @@ const studioProcess = {
 };
 
 export default async function HomePage() {
-  const [heroArtworks, featured, allArtworks, entradas] = await Promise.all([
+  const [heroArtworks, featured, curadas, entradas] = await Promise.all([
     getArtworksBySlugs(heroSlugs),
     getFeaturedArtworks(),
-    getAllArtworks(),
+    getArtworksBySlugs(seleccionSlugs),
     getFeaturedPosts(),
   ]);
 
-  // Selección de portada: las destacadas en el Studio; si aún no hay ninguna,
-  // las primeras pinturas con imagen, para que la sección nunca quede vacía.
-  const seleccion = (
-    featured.length
-      ? featured
-      : allArtworks.filter((artwork) => artwork.categoria === "Pintura")
-  )
+  // Manda lo que se marque como destacado en el Studio; si no hay nada
+  // marcado, la selección curada de arriba.
+  const seleccion = (featured.length ? featured : curadas)
     .filter((artwork) => artwork.imagen)
     .slice(0, 10);
-  const seleccionLabel = seleccion.every(
-    (artwork) => artwork.categoria === "Pintura"
-  )
-    ? "Pinturas seleccionadas"
-    : "Obras seleccionadas";
 
   return (
     <>
@@ -132,10 +137,10 @@ export default async function HomePage() {
       <ArtworkSlider artworks={heroArtworks} />
 
       {/* Scroll 2 · Filosofía */}
-      <Section>
+      <Section width="plus">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
-          <div className="flex max-w-xl flex-col">
-            <div className="type-body flex flex-col gap-6 text-muted">
+          <div className="flex max-w-2xl flex-col">
+            <div className="type-body-lg flex flex-col gap-6 text-muted">
               {philosophy.paragraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
@@ -158,12 +163,12 @@ export default async function HomePage() {
       </Section>
 
       {/* Scrolls 3, 4 y 5 · Pintura, Escultura, Fotografía */}
-      <Section className="pt-0">
+      <Section tone="paper">
         <div className="grid gap-14 sm:grid-cols-3 sm:grid-rows-[auto_auto_auto_auto] sm:gap-x-8 sm:gap-y-0 md:gap-x-10">
           {disciplines.map((item) => (
             <div
               key={item.title}
-              className="flex flex-col sm:row-span-4 sm:grid sm:grid-rows-subgrid sm:gap-0"
+              className="group flex flex-col sm:row-span-4 sm:grid sm:grid-rows-subgrid sm:gap-0"
             >
               <h2 className="type-heading text-ink">{item.title}</h2>
               <p className="type-small mt-4 text-muted">{item.text}</p>
@@ -173,7 +178,7 @@ export default async function HomePage() {
                   alt={item.alt}
                   fill
                   sizes="(max-width: 640px) 100vw, 33vw"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                 />
               </div>
               <ActionLink href={item.href} className="mt-5">
@@ -186,16 +191,12 @@ export default async function HomePage() {
 
       {/* Todas las obras · selección */}
       {seleccion.length > 0 && (
-        <Section className="pt-0">
+        <Section>
           <SectionHeader
-            title="Todas las obras"
+            title="Obras seleccionadas"
             action={<ActionLink href="/obras">Ver todas las obras</ActionLink>}
           />
-          <div className="stack-header flex items-end justify-between gap-6 border-b border-line pb-4">
-            <Eyebrow>({seleccionLabel})</Eyebrow>
-            <Eyebrow>({seleccion.length})</Eyebrow>
-          </div>
-          <div className="mt-10">
+          <div className="stack-header">
             <FeaturedWorksGrid artworks={seleccion} />
           </div>
         </Section>
@@ -295,14 +296,18 @@ export default async function HomePage() {
       </Section>
 
       {/* Scroll 8 · Trayectoria. Las entradas marcadas "Mostrar en inicio" en el
-          Studio; el resto vive en /blog. */}
+          Studio; el resto vive en /exposiciones. */}
       {entradas.length > 0 && (
         <Section tone="paper">
           <SectionHeader
             align="center"
             title="Trayectoria"
             description="Cada exposición ha representado una oportunidad para compartir mi trabajo, conocer nuevas miradas y continuar construyendo un camino dentro del arte contemporáneo."
-            action={<ActionLink href="/blog">Ver trayectoria completa</ActionLink>}
+            action={
+              <ActionLink href="/exposiciones">
+                Ver trayectoria completa
+              </ActionLink>
+            }
           />
           <div className="stack-header flex flex-col gap-10">
             {entradas.map((post) => (
